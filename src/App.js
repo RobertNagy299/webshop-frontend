@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import './App.css'
 import {
   ChakraProvider,
   Box,
@@ -7,36 +8,38 @@ import {
   VStack,
   Code,
   Grid,
-  theme,
+  theme, GridItem,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
+import HomePage from "./components/HomePage";
+import Navbar from "./components/Navbar";
+import RootLayout from "./layouts/RootLayout";
+import Products from "./components/Products";
+import Profile from "./components/Profile";
+import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
+import DashBoard from "./components/DashBoard";
+import Create, {createAction} from "./components/Create";
+import SiteSkeleton from "./components/SiteSkeleton";
+
+
+
+const router = createBrowserRouter(
+    createRoutesFromElements(
+        <Route path="/" element={<SiteSkeleton> <RootLayout/></SiteSkeleton>} >
+            <Route index element={
+                <Products/>}/>
+          <Route path="profile" element={<Profile/>} />
+          <Route path="create" element={<Create/>} action={createAction}/>
+        </Route>
+    )
+);
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
-      <Box textAlign="center" fontSize="xl">
-        <Grid minH="100vh" p={3}>
-          <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <Logo h="40vmin" pointerEvents="none" />
-            <Text>
-              Edit <Code fontSize="xl">src/App.js</Code> and save to reload.
-            </Text>
-            <Link
-              color="teal.500"
-              href="https://chakra-ui.com"
-              fontSize="2xl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn Chakra
-            </Link>
-          </VStack>
-        </Grid>
-      </Box>
-    </ChakraProvider>
-  );
+    <RouterProvider router={router} />
+
+  )
 }
 
 export default App;
